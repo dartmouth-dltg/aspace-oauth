@@ -13,7 +13,7 @@
 
         <%# OAuth sign-in buttons (visible when logged out) %>
         <%# Omit if configured to only show body login %>
-        <% if AppConfig.has_key?(:aspace_oauth_allow_standard_login) && AppConfig[:aspace_oauth_allow_standard_login] %>
+        <% unless AppConfig.has_key?(:aspace_oauth_override_standard_login) && AppConfig[:aspace_oauth_override_standard_login] %>
           <% if AppConfig[:oauth_definitions] && !session[:user] %>
             <% AppConfig[:oauth_definitions].each do |oauth_definition| %>
               <li class="d-flex align-items-center text-nowrap ml-2">

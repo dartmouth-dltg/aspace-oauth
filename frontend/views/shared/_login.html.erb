@@ -1,4 +1,4 @@
-<% unless AppConfig.has_key?(:aspace_oauth_allow_standard_login) && AppConfig[:aspace_oauth_allow_standard_login] %>
+<% if AppConfig.has_key?(:aspace_oauth_override_standard_login) && AppConfig[:aspace_oauth_override_standard_login] %>
   <% if AppConfig[:oauth_definitions] && !session[:user] %>
     <ul class="d-flex list-unstyled">
       <% AppConfig[:oauth_definitions].each do |oauth_definition| %>
@@ -12,8 +12,7 @@
       <% end %>
     </ul>
   <% end %>
-<% end %>
-<% if AppConfig.has_key?(:aspace_oauth_allow_standard_login) && AppConfig[:aspace_oauth_allow_standard_login] %>
+<% else %>
   <%= form_tag({:controller => "session",:action => "login"}, :method => "post", :class => "login mb-2") do %>
       <p class="alert alert-danger"><%= t "login.login_fail" %></p>
       <p class="alert alert-success"><%= t "login.login_success" %>.</p>

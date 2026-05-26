@@ -61,7 +61,7 @@ Rails.application.config.after_initialize do
   class SessionController < ApplicationController
   
     def login
-      if AppConfig.has_key?(:aspace_oauth_allow_standard_login) && AppConfig[:aspace_oauth_allow_standard_login]
+      if AppConfig.has_key?(:aspace_oauth_override_standard_login) && AppConfig[:aspace_oauth_override_standard_login]
         backend_session = User.login(params[:username], params[:password])
       else
         backend_session = nil
