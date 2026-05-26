@@ -184,6 +184,13 @@ config: {
 }
 ```
 
+## Override Standard Login
+
+To override the standard login screen, set
+```ruby
+AppConfig[:aspace_oauth_override_standard_login] = true
+```
+
 ## Developer
 
 ```bash
