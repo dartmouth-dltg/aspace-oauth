@@ -55,3 +55,28 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     $stdout.puts "REGISTERED OAUTH PROVIDER WITH CONFIG: #{config}" if AspaceOauth.debug?
   end
 end
+
+Rails.application.config.after_initialize do
+  # remove the option to start a login from the front end unless it goes through oauth controller
+  # unless configured to allow standard login
+  class SessionController < ApplicationController
+  
+    def login
+      if AppConfig.has_key?(:aspace_oauth_override_standard_login) && AppConfig[:aspace_oauth_override_standard_login]
+        backend_session = User.login(params[:username], params[:password])
+      else
+        backend_session = nil
+      end
+  
+      if backend_session
+        User.establish_session(self, backend_session, params[:username])
+      end
+  
+      load_repository_list
+  
+      render :json => {:session => backend_session, :csrf_token => form_authenticity_token}
+    end
+    
+  end
+
+end
