@@ -1,50 +1,53 @@
-<div class="global-header">
-  <span class="sr-only">
-    <h1><%= t("header.staff_interface") %></h1>
-  </span>
-  <nav class="global-header-nav">
-    <%= render "site/branding" %>
-    <ul
-      class="
-        list-unstyled ml-auto d-flex gap-x-2 bg-light rounded-bottom shadow-sm
-      "
-    >
-      <%= render "shared/header_user" %>
+  <div class="global-header">
+    <span class="sr-only">
+      <h1><%= t("header.staff_interface") %></h1>
+    </span>
+    <nav class="global-header-nav">
+      <%= render "site/branding" %>
+      <ul
+        class="
+          list-unstyled ml-auto d-flex gap-x-2 bg-light rounded-bottom shadow-sm
+        "
+      >
+        <%= render "shared/header_user" %>
 
-      <%# OAuth sign-in buttons (visible when logged out) %>
-      <% if AppConfig[:oauth_definitions] && !session[:user] %>
-        <% AppConfig[:oauth_definitions].each do |oauth_definition| %>
-          <li class="d-flex align-items-center text-nowrap ml-2">
-            <%= button_to oauth_definition[:label],
-            "#{AppConfig[:frontend_proxy_prefix]}auth/#{oauth_definition[:provider]}",
-            method: :post,
-            form_class: "d-inline",
-            class: "btn btn-sm btn-link" %>
+        <%# OAuth sign-in buttons (visible when logged out) %>
+        <%# Omit if configured to only show body login %>
+        <% if AppConfig.has_key?(:aspace_oauth_allow_standard_login) && AppConfig[:aspace_oauth_allow_standard_login] %>
+          <% if AppConfig[:oauth_definitions] && !session[:user] %>
+            <% AppConfig[:oauth_definitions].each do |oauth_definition| %>
+              <li class="d-flex align-items-center text-nowrap ml-2">
+                <%= button_to oauth_definition[:label],
+                "#{AppConfig[:frontend_proxy_prefix]}auth/#{oauth_definition[:provider]}",
+                method: :post,
+                form_class: "d-inline",
+                class: "btn btn-sm btn-link" %>
+              </li>
+            <% end %>
+          <% end %>
+        <% end %>
+
+        <% if ArchivesSpaceHelp.enabled? %>
+          <%# .mr-3 aligns link_to_help with the other items below it %>
+          <li class="d-flex align-items-center<%= ' mr-3' if session[:user] %>">
+            <%= link_to_help %>
           </li>
         <% end %>
-      <% end %>
+      </ul>
+    </nav>
+  </div>
 
-      <% if ArchivesSpaceHelp.enabled? %>
-        <%# .mr-3 aligns link_to_help with the other items below it %>
-        <li class="d-flex align-items-center<%= ' mr-3' if session[:user] %>">
-          <%= link_to_help %>
-        </li>
-      <% end %>
-    </ul>
-  </nav>
-</div>
-
-<%# OAuth SLO (single logout) links injected into the logout dropdown %>
-<% if session[:user] %>
-  <% AppConfig[:oauth_definitions].select { |od| od[:slo_link] }.each do |oauth_definition| %>
-    <% slo_label = "#{oauth_definition[:provider].upcase} Logout" %>
-    <% slo_path =
-      "#{AppConfig[:frontend_proxy_prefix]}auth/#{oauth_definition[:provider]}_logout" %>
-    <script type="text/javascript">
-      (function() {
-        var logoutMenu = $('a[href~="<%= AppConfig[:frontend_proxy_prefix] %>logout"]').parent().parent();
-        logoutMenu.append('<li><%= link_to slo_label, slo_path, class: "dropdown-item" %></li>');
-      })();
-    </script>
+  <%# OAuth SLO (single logout) links injected into the logout dropdown %>
+  <% if session[:user] %>
+    <% AppConfig[:oauth_definitions].select { |od| od[:slo_link] }.each do |oauth_definition| %>
+      <% slo_label = "#{oauth_definition[:provider].upcase} Logout" %>
+      <% slo_path =
+        "#{AppConfig[:frontend_proxy_prefix]}auth/#{oauth_definition[:provider]}_logout" %>
+      <script type="text/javascript">
+        (function() {
+          var logoutMenu = $('a[href~="<%= AppConfig[:frontend_proxy_prefix] %>logout"]').parent().parent();
+          logoutMenu.append('<li><%= link_to slo_label, slo_path, class: "dropdown-item" %></li>');
+        })();
+      </script>
+    <% end %>
   <% end %>
-<% end %>

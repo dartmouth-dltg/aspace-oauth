@@ -1,0 +1,28 @@
+<% unless AppConfig.has_key?(:aspace_oauth_allow_standard_login) && AppConfig[:aspace_oauth_allow_standard_login] %>
+  <% if AppConfig[:oauth_definitions] && !session[:user] %>
+    <ul class="d-flex list-unstyled">
+      <% AppConfig[:oauth_definitions].each do |oauth_definition| %>
+        <li class="d-flex align-items-center text-nowrap ml-2">
+          <%= button_to oauth_definition[:label],
+          "#{AppConfig[:frontend_proxy_prefix]}auth/#{oauth_definition[:provider]}",
+          method: :post,
+          form_class: "d-inline",
+          class: "btn btn-primary aspace-oauth-btn" %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>
+<% if AppConfig.has_key?(:aspace_oauth_allow_standard_login) && AppConfig[:aspace_oauth_allow_standard_login] %>
+  <%= form_tag({:controller => "session",:action => "login"}, :method => "post", :class => "login mb-2") do %>
+      <p class="alert alert-danger"><%= t "login.login_fail" %></p>
+      <p class="alert alert-success"><%= t "login.login_success" %>.</p>
+      <div class="form-group">
+        <input id="user_username" type="text" name="username" size="30" placeholder="<%= t "login.username_placeholder" %>" class="form-control" aria-label="<%= t "login.username_aria_label" %>"/>
+      </div>
+      <div class="form-group">
+        <input id="user_password" type="password" name="password" size="30" placeholder="<%= t "login.password_placeholder" %>" class="form-control" aria-label="<%= t "login.password_aria_label" %>"/>
+      </div>
+    <input class="mt-2 btn btn-primary navbar-btn" type="submit" name="commit" value="<%= t("login.login") %>" id="login" />
+  <% end %>
+<% end %>
