@@ -34,7 +34,7 @@ class ASOauth
 
     # Reject authentication if user does not already exist in the database
     # and new user registration is not allowed
-    if AppConfig[:allow_user_registration] == false
+    if AppConfig.has_key?(:aspace_oauth_allow_sso_user_registration) && AppConfig[:aspace_oauth_allow_sso_user_registration] == false
       existing_user = DB.open do |db|
         db[:user].filter(Sequel.function(:lower, :username) => username.downcase)
       end

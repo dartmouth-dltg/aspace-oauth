@@ -1,5 +1,13 @@
-.aspace-oauth-btn {
-    width: 100%;
-    color: #fff;
-    font-size: 1.5rem;
+.aspace-oauth-logins {
+    li {
+        width: 100%;
+        form {
+            width: 100%;
+        }
+    }
+    .aspace-oauth-btn {
+        width: 100%;
+        color: #fff;
+        font-size: 1.5em;
+    }
 }
