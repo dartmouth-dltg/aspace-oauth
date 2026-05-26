@@ -144,6 +144,13 @@ openssl genrsa -out rsaprivkey.pem 2048
 openssl req -new -x509 -nodes -days 3650 -key rsaprivkey.pem -out rsacert.pem
 ```
 
+## Override Standard Login
+
+To override the standard login screen, set
+```ruby
+AppConfig[:aspace_oauth_override_standard_login] = true
+```
+
 ## Developer
 
 ```bash
