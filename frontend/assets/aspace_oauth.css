@@ -1,0 +1,11 @@
+/* Dartmouth: full-width OAuth sign-in buttons replacing the welcome page login form */
+.aspace-oauth-logins li,
+.aspace-oauth-logins li form {
+  width: 100%;
+}
+
+.aspace-oauth-logins .aspace-oauth-btn {
+  width: 100%;
+  color: #fff;
+  font-size: 1.5em;
+}

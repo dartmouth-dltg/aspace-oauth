@@ -1,12 +1,15 @@
 <%# Only replace the welcome page form; the session expired modal keeps the core form so unsaved work is not lost to an IDP redirect %>
 <% if AspaceOauth.replace_login_form? && controller_name == "welcome" %>
-  <% AppConfig[:oauth_definitions].each do |oauth_definition| %>
-    <%= button_to oauth_definition[:label],
-    "#{AppConfig[:frontend_proxy_prefix]}auth/#{oauth_definition[:provider]}",
-    method: :post,
-    form_class: "mb-2",
-    class: "btn btn-primary btn-block" %>
-  <% end %>
+  <ul class="d-flex list-unstyled aspace-oauth-logins">
+    <% AppConfig[:oauth_definitions].each do |oauth_definition| %>
+      <li class="d-flex align-items-center text-nowrap ml-2">
+        <%= button_to oauth_definition[:label],
+        "#{AppConfig[:frontend_proxy_prefix]}auth/#{oauth_definition[:provider]}",
+        method: :post,
+        class: "btn btn-primary aspace-oauth-btn" %>
+      </li>
+    <% end %>
+  </ul>
   <% if AspaceOauth.local_login_fallback? %>
     <details class="mt-3 mb-2">
       <summary><%= t("plugins.aspace_oauth.local_login") %></summary>
